@@ -54,6 +54,10 @@ import imageSrc1 from "../components/pic1.jpg";
 import imageSrc2 from "../components/pic2.jpg";
 import imageSrc3 from "../components/pic4.jpg";
 import imageSrc4 from "../components/pic5.jpg";
+import imageSrc5 from "../components/pic6.jpg";
+import imageSrc6 from "../components/pic7.jpg";
+import imageSrc7 from "../components/pic8.jpg";
+import imageSrc8 from "../components/pic9.jpg";
 // Import additional images as needed
 
 const ImageClassification = () => {
@@ -61,7 +65,16 @@ const ImageClassification = () => {
   const [classifier, setClassifier] = useState(null);
   const [imageIndex, setImageIndex] = useState(1);
 
-  const images = [imageSrc1, imageSrc2, imageSrc3];
+  const images = [
+    imageSrc1,
+    imageSrc2,
+    imageSrc3,
+    imageSrc4,
+    imageSrc5,
+    imageSrc6,
+    imageSrc7,
+    imageSrc8,
+  ];
   // Add additional image paths to the 'images' array
 
   const classifyImage = () => {
