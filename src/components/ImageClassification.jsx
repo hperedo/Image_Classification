@@ -53,6 +53,7 @@ import ml5 from "ml5";
 import imageSrc1 from "../components/pic1.jpg";
 import imageSrc2 from "../components/pic2.jpg";
 import imageSrc3 from "../components/pic4.jpg";
+import imageSrc4 from "../components/pic5.jpg";
 // Import additional images as needed
 
 const ImageClassification = () => {
@@ -108,9 +109,28 @@ const ImageClassification = () => {
       <h1>Image Classification</h1>
       <h2>With MobileNet and ml5.js</h2>
       <div id="result">{result}</div>
-      <img id="image" src={images[imageIndex]} width="100%" alt="Input Image" />
-      <button onClick={handleClassifyImage}>Classify Image</button>
-      <button onClick={handleLoadNewImage}>Load New Image</button>
+      <div style={{ position: "relative", width: "100%" }}>
+        <img
+          id="image"
+          src={images[imageIndex]}
+          style={{ width: "100%" }}
+          alt="Input Image"
+        />
+        <div style={{ position: "absolute", bottom: "10px", width: "100%" }}>
+          <button
+            onClick={handleClassifyImage}
+            style={{ width: "50%", margin: "0 auto", fontSize: "25px" }}
+          >
+            Classify Image
+          </button>
+          <button
+            onClick={handleLoadNewImage}
+            style={{ width: "50%", margin: "0 auto", fontSize: "25px" }}
+          >
+            Load New Image
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
