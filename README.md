@@ -1,4 +1,4 @@
-# Getting Started with Create React App  and ml5.js
+# Getting Started with Create React App, Machine Learning and ml5.js
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
