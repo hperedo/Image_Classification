@@ -58,6 +58,7 @@ import imageSrc5 from "../components/pic6.jpg";
 import imageSrc6 from "../components/pic7.jpg";
 import imageSrc7 from "../components/pic8.jpg";
 import imageSrc8 from "../components/pic9.jpg";
+import imageSrc9 from "../components/pic10.jpg";
 // Import additional images as needed
 
 const ImageClassification = () => {
@@ -74,6 +75,7 @@ const ImageClassification = () => {
     imageSrc6,
     imageSrc7,
     imageSrc8,
+    imageSrc9,
   ];
   // Add additional image paths to the 'images' array
 
