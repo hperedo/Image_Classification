@@ -79,10 +79,9 @@ const ImageClassification = () => {
   ];
   // Add additional image paths to the 'images' array
 
-  const classifyImage = () => {
-    const imgElement = document.getElementById("image");
+  const classifyImage = (imageElement) => {
     if (classifier) {
-      classifier.classify(imgElement, (error, results) => {
+      classifier.classify(imageElement, (error, results) => {
         if (error) {
           console.error(error);
           setResult("Error");
@@ -101,7 +100,6 @@ const ImageClassification = () => {
     const loadedClassifier = ml5.imageClassifier("MobileNet", () => {
       console.log("Model Loaded");
       setClassifier(loadedClassifier);
-      classifyImage();
     });
 
     return () => {
@@ -110,13 +108,27 @@ const ImageClassification = () => {
   }, []);
 
   const handleClassifyImage = () => {
-    classifyImage();
+    const imageElement = document.getElementById("image");
+    classifyImage(imageElement);
   };
 
   const handleLoadNewImage = () => {
     const nextImageIndex = (imageIndex + 1) % images.length;
     setImageIndex(nextImageIndex);
     setResult("Scanning ...");
+  };
+
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      const imageElement = document.getElementById("image");
+      imageElement.src = e.target.result;
+      classifyImage(imageElement);
+    };
+
+    reader.readAsDataURL(file);
   };
 
   return (
@@ -144,6 +156,12 @@ const ImageClassification = () => {
           >
             Load New Image
           </button>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageUpload}
+            style={{ display: "block", margin: "10px auto", fontSize: "25px" }}
+          />
         </div>
       </div>
     </div>
