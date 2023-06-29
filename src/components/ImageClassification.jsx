@@ -64,7 +64,9 @@ import imageSrc9 from "../components/pic10.jpg";
 const ImageClassification = () => {
   const [result, setResult] = useState("Scanning ...");
   const [classifier, setClassifier] = useState(null);
+  const [knnClassifier, setKNNClassifier] = useState(null);
   const [imageIndex, setImageIndex] = useState(1);
+  const [selectedClassifier, setSelectedClassifier] = useState("MobileNet");
 
   const images = [
     imageSrc1,
@@ -79,8 +81,31 @@ const ImageClassification = () => {
   ];
   // Add additional image paths to the 'images' array
 
+  const classifiers = {
+    MobileNet: "MobileNet",
+    DoodleNet: "DoodleNet",
+    //KNNClassifier: "KNNClassifier",
+    //TensorFlow: "TensorFlow",
+    //PyTorch: "PyTorch",
+    //"scikit-learn": "scikit-learn",
+    //Keras: "Keras",
+    //CUDA: "CUDA",
+    // Add additional classifiers as needed
+  };
+
   const classifyImage = (imageElement) => {
-    if (classifier) {
+    if (selectedClassifier === "KNNClassifier" && knnClassifier) {
+      knnClassifier.classify(imageElement, (error, results) => {
+        if (error) {
+          console.error(error);
+          setResult("Error");
+        } else {
+          setResult(
+            `${results.label}\nConfidence: ${results.confidence.toFixed(2)}%`
+          );
+        }
+      });
+    } else if (classifier) {
       classifier.classify(imageElement, (error, results) => {
         if (error) {
           console.error(error);
@@ -96,16 +121,21 @@ const ImageClassification = () => {
   };
 
   useEffect(() => {
-    // Initialize Image Classifier with MobileNet.
-    const loadedClassifier = ml5.imageClassifier("MobileNet", () => {
-      console.log("Model Loaded");
-      setClassifier(loadedClassifier);
-    });
+    // Initialize the selected Image Classifier.
+    if (selectedClassifier === "KNNClassifier") {
+      const loadedKNNClassifier = ml5.KNNClassifier();
+      setKNNClassifier(loadedKNNClassifier);
+    } else {
+      const loadedClassifier = ml5.imageClassifier(selectedClassifier, () => {
+        console.log("Model Loaded");
+        setClassifier(loadedClassifier);
+      });
+    }
 
     return () => {
       // Cleanup code if needed
     };
-  }, []);
+  }, [selectedClassifier]);
 
   const handleClassifyImage = () => {
     const imageElement = document.getElementById("image");
@@ -131,19 +161,36 @@ const ImageClassification = () => {
     reader.readAsDataURL(file);
   };
 
+  const handleClassifierSelection = (event) => {
+    setSelectedClassifier(event.target.value);
+    setResult("Scanning ...");
+  };
+
   return (
     <div>
       <h1>Image Classification</h1>
       <h2>With MobileNet and ml5.js</h2>
-      <div id="result">{result}</div>
-      <div style={{ position: "relative", width: "100%" }}>
+      <div
+        id="result"
+        style={{ position: "relative", width: "100%", fontSize: "30px" }}
+      >
+        {result}
+      </div>
+      <div style={{ position: "relative", width: "100%", fontSize: "25px" }}>
         <img
           id="image"
           src={images[imageIndex]}
           style={{ width: "100%" }}
           alt="Input Image"
         />
-        <div style={{ position: "absolute", bottom: "10px", width: "100%" }}>
+        <div
+          style={{
+            position: "absolute",
+            bottom: "10px",
+            width: "100%",
+            fontSize: "25px",
+          }}
+        >
           <button
             onClick={handleClassifyImage}
             style={{ width: "50%", margin: "0 auto", fontSize: "25px" }}
@@ -162,6 +209,20 @@ const ImageClassification = () => {
             onChange={handleImageUpload}
             style={{ display: "block", margin: "10px auto", fontSize: "25px" }}
           />
+          <div>
+            <label htmlFor="classifierSelect">Select Classifier:</label>
+            <select
+              id="classifierSelect"
+              value={selectedClassifier}
+              onChange={handleClassifierSelection}
+            >
+              {Object.keys(classifiers).map((classifierKey) => (
+                <option key={classifierKey} value={classifiers[classifierKey]}>
+                  {classifierKey}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
       </div>
     </div>
